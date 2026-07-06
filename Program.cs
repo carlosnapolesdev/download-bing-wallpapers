@@ -35,13 +35,14 @@ foreach (XmlNode node in xmlNodes)
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         
-        HtmlNode htmlNode = doc.DocumentNode.SelectSingleNode("//a[@class='icon download']");
+        HtmlNode htmlNode = doc.DocumentNode.SelectSingleNode("//img[@id='bing_wallpaper']");
 
-        string link = htmlNode.Attributes["href"].Value;
-        string downloadLink = SiteUrl + link;
+        if (htmlNode == null) continue;
+
+        string downloadLink = htmlNode.Attributes["src"].Value;
 
         // You have to create the folder
-        string destinationFile = DestinationFolder + link.Replace("/bingImages/", "");
+        string destinationFile = DestinationFolder + Path.GetFileName(new Uri(downloadLink).AbsolutePath);
 
         if (File.Exists(destinationFile))
         {
